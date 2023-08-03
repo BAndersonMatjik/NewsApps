@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-
+        //build config deprecated as AGP 9.0
         buildConfigField "String", "NEWS_API_URL", "\"https://newsapi.org/\""
         buildConfigField "String", "NEWS_API_KEY", "\"645fbc145a4b4a55a3ae8693f9065cb5\""
     }
