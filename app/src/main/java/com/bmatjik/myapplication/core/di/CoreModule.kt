@@ -19,29 +19,25 @@ object CoreModule {
     @Provides
     @NewsUrl
     @Singleton
-    fun providesNewsApiUrl():String = BuildConfig.NEWS_API_URL
+    fun providesNewsApiUrl(): String = BuildConfig.NEWS_API_URL
 
     @Provides
     @NewsKey
     @Singleton
-    fun providesNewsApiKey():String = BuildConfig.NEWS_API_KEY
+    fun providesNewsApiKey(): String = BuildConfig.NEWS_API_KEY
 
     @Provides
     @Singleton
-    fun providesRetrofit(@NewsUrl url: String):Retrofit{
+    fun providesRetrofit(@NewsUrl url: String): Retrofit {
         return Retrofit.Builder().baseUrl(url)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 
-    @InstallIn(SingletonComponent::class)
-    @Module
-    object CoreModule{
-        @Singleton
-        @Provides
-        fun providesGeoApi(retrofit: Retrofit):NewsApi{
-            return retrofit.create(NewsApi::class.java)
-        }
+    @Singleton
+    @Provides
+    fun providesNewsApi(retrofit: Retrofit): NewsApi {
+        return retrofit.create(NewsApi::class.java)
     }
 
 
