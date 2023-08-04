@@ -6,15 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.bmatjik.myapplication.databinding.TextItemChipBinding
+import com.bmatjik.myapplication.databinding.TextChipItemBinding
+import timber.log.Timber
 
 class CategoryAdapter constructor(private val list: ArrayList<String> = arrayListOf()) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-
-    class CategoryViewHolder(private val view: TextItemChipBinding) : ViewHolder(view.root) {
+    private var onClickItem:OnClickItem?=null
+    class CategoryViewHolder(private val view: TextChipItemBinding,private val onClickItem: OnClickItem?) : ViewHolder(view.root) {
 
         fun onBind(title:String) {
             view.chipText.text = title
+            view.chipText.setOnClickListener {
+                onClickItem?.onClickItem(title)
+                Timber.d("test $title")
+            }
         }
     }
     fun submit(data:List<String>){
@@ -23,8 +28,8 @@ class CategoryAdapter constructor(private val list: ArrayList<String> = arrayLis
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val textItemChipBinding =
-            TextItemChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CategoryViewHolder(textItemChipBinding)
+            TextChipItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CategoryViewHolder(textItemChipBinding,onClickItem)
     }
 
     override fun getItemCount(): Int {
@@ -33,5 +38,13 @@ class CategoryAdapter constructor(private val list: ArrayList<String> = arrayLis
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.onBind(list[position])
+    }
+
+    fun setListenerItem(onClickItem: OnClickItem){
+        this.onClickItem = onClickItem
+    }
+
+    interface OnClickItem{
+        fun onClickItem(item:String)
     }
 }
