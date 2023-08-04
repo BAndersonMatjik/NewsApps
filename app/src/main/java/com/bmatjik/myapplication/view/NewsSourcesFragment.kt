@@ -4,26 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
-import android.widget.AbsListView.OnScrollListener
-import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bmatjik.myapplication.common.BaseFragment
 import com.bmatjik.myapplication.common.MarginItemDecoration
 import com.bmatjik.myapplication.databinding.FragmentNewsSourcesBinding
-import com.bmatjik.myapplication.feature.model.NewsSource
 import com.bmatjik.myapplication.view.adapter.NewsSourcesAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
