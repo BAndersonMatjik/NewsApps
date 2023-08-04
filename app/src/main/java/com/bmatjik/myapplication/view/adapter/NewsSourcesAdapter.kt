@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bmatjik.myapplication.common.Constants
 import com.bmatjik.myapplication.databinding.SourceItemBinding
 import com.bmatjik.myapplication.feature.model.NewsSource
 import com.bumptech.glide.Glide
@@ -27,28 +28,19 @@ class NewsSourcesAdapter : ListAdapter<NewsSource, NewsSourcesAdapter.NewsSource
             sourceItemBinding.apply {
                 tvTitle.text = newsSource.name
                 tvDescription.text = newsSource.description
-                Glide.with(sourceItemBinding.root.context).load("https://flagcdn.com/w80/${newsSource.country}.png").into(imgCountry)
+
+                Glide.with(sourceItemBinding.root.context).load(Constants.FlagUrl.replace("#img",newsSource.country)).into(imgCountry)
                 tvCategory.text = newsSource.category.uppercase()
             }
         }
-        fun onBindNothing(){
-            sourceItemBinding.root.visibility = View.GONE
-        }
-    }
-    private var _realSize = 0
-    val realSize get() = _realSize
-    override fun submitList(list: List<NewsSource>?) {
-        super.submitList(list)
-
-        _realSize = list?.size?:0
 
     }
 
     override fun getItemCount(): Int {
-        if (realSize==0){
-            return super.getItemCount()
+        return if (this.currentList.size==0){
+            super.getItemCount()
         }else{
-            return Int.MAX_VALUE
+            Int.MAX_VALUE
         }
     }
 
