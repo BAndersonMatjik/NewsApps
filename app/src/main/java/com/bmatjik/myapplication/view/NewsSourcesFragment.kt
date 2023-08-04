@@ -10,11 +10,13 @@ import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmatjik.myapplication.common.BaseFragment
 import com.bmatjik.myapplication.common.MarginItemDecoration
 import com.bmatjik.myapplication.databinding.FragmentNewsSourcesBinding
+import com.bmatjik.myapplication.feature.model.NewsSource
 import com.bmatjik.myapplication.view.adapter.NewsSourcesAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +31,7 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
     private val adapter by lazy {
         NewsSourcesAdapter()
     }
+    val args: NewsSourcesFragmentArgs by navArgs()
 
     companion object {
         fun newInstance() = NewsSourcesFragment()
@@ -42,6 +45,7 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
     }
 
     override fun initView() {
+       viewModel.category = args.category
     }
 
 
@@ -49,11 +53,10 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsSources.addItemDecoration(MarginItemDecoration(8))
         binding.rvNewsSources.adapter = adapter
-        viewModel.getNewsSources("business")
+        viewModel.getNewsSources()
 
         lifecycleScope.launch {
             viewModel.uiState.collectLatest { uiState ->
-                Timber.d("test2 " + uiState.toString())
                 if (uiState.isLoading) {
                     binding.progressCircular.visibility = View.VISIBLE
                 } else {
@@ -69,7 +72,7 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
                             dialog.dismiss()
                         }
                         .setPositiveButton("retry") { dialog, which ->
-                            viewModel.getNewsSources("business")
+                            viewModel.getNewsSources()
                             dialog.dismiss()
                         }
                         .show()

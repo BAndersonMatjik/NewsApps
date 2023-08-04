@@ -17,8 +17,8 @@ class NewsSourcesViewModel @Inject constructor(
 ): ViewModel() {
     private val _uiState = MutableStateFlow<NewsSourcesUiState>(NewsSourcesUiState())
     val uiState: StateFlow<NewsSourcesUiState> = _uiState.asStateFlow()
-
-    fun getNewsSources(category:String){
+    var category:String = ""
+    fun getNewsSources(){
         _uiState.value = _uiState.value.copy(true, error = "")
         viewModelScope.launch {
             getNewsSourcesUsecase(category).fold(onFailure = {

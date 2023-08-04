@@ -34,7 +34,7 @@ class NewsListCategoryFragment : BaseFragment<FragmentNewsListCategoryBinding>()
         super.onViewCreated(view, savedInstanceState)
         adapter.setListenerItem(object : CategoryAdapter.OnClickItem{
             override fun onClickItem(item: String) {
-                findNavController().navigate(NewsListCategoryFragmentDirections.actionNewsListCategoryFragmentToNewsSourceFragment())
+                findNavController().navigate(NewsListCategoryFragmentDirections.actionNewsListCategoryFragmentToNewsSourcesFragment(item))
             }
         })
         adapter.submit(Constants.NewsCategory)

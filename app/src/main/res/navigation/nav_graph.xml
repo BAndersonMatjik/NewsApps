@@ -11,16 +11,23 @@
         android:label="fragment_news_list_category"
         tools:layout="@layout/fragment_news_list_category" >
         <action
-            android:id="@+id/action_newsListCategoryFragment_to_newsSourceFragment"
-            app:destination="@id/newsSourceFragment"
+            android:id="@+id/action_newsListCategoryFragment_to_newsSourcesFragment"
+            app:destination="@id/newsSourcesFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:exitAnim="@anim/nav_default_exit_anim" >
+
+        </action>
     </fragment>
 
     <fragment
-        android:id="@+id/newsSourceFragment"
+        android:id="@+id/newsSourcesFragment"
         android:name="com.bmatjik.myapplication.view.NewsSourcesFragment"
         android:label="fragment_news_source"
-        tools:layout="@layout/fragment_news_sources" />
+        tools:layout="@layout/fragment_news_sources" >
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
 
 </navigation>
