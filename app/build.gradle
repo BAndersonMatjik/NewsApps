@@ -78,6 +78,9 @@ dependencies {
     //retrofit-moshi
     implementation "com.squareup.retrofit2:converter-moshi:2.4.0"
 
+
+    // Moshi
+    implementation 'com.squareup.moshi:moshi-kotlin:1.9.3'
     //dagger
     implementation 'com.google.dagger:hilt-android:2.47'
     kapt 'com.google.dagger:hilt-compiler:2.47'
@@ -92,4 +95,6 @@ dependencies {
 
     //timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 }
