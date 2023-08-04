@@ -2,10 +2,15 @@ package com.bmatjik.myapplication.core.di
 
 import com.bmatjik.myapplication.BuildConfig
 import com.bmatjik.myapplication.core.remote.api.NewsApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttp
 import okhttp3.OkHttpClient
@@ -20,9 +25,18 @@ import javax.inject.Singleton
 object CoreModule {
 
     @Provides
+    @Singleton
+    fun providesIoDispatcherCoroutine():CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
     @NewsUrl
     @Singleton
     fun providesNewsApiUrl(): String = BuildConfig.NEWS_API_URL
+
+    @Provides
+    @Singleton
+    fun providesMoshi():Moshi= Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
 
     @Provides
     @NewsKey
@@ -31,13 +45,12 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit(@NewsUrl url: String,okHttpClient: OkHttpClient): Retrofit {
+    fun providesRetrofit(@NewsUrl url: String,okHttpClient: OkHttpClient,moshi: Moshi): Retrofit {
         return Retrofit.Builder().baseUrl(url)
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
-
     @Provides
     @Singleton
     fun providesHttpLogging(): HttpLoggingInterceptor {
@@ -49,7 +62,6 @@ object CoreModule {
             }
         }
     }
-
     @Provides
     @Singleton
     fun providesHttpSecretKeyInterceptor(@NewsKey newsKey: String): Interceptor {
@@ -59,7 +71,6 @@ object CoreModule {
             response
         }
     }
-
 
     @Provides
     @Singleton
@@ -71,14 +82,11 @@ object CoreModule {
             .addInterceptor(secretKeyInterceptor).build()
     }
 
-
     @Singleton
     @Provides
     fun providesNewsApi(retrofit: Retrofit): NewsApi {
         return retrofit.create(NewsApi::class.java)
     }
-
-
     //handle qualifier for DI
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
