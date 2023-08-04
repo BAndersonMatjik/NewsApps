@@ -6,6 +6,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttp
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
@@ -27,11 +31,46 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit(@NewsUrl url: String): Retrofit {
+    fun providesRetrofit(@NewsUrl url: String,okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder().baseUrl(url)
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun providesHttpLogging(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            if (BuildConfig.DEBUG) {
+                setLevel(HttpLoggingInterceptor.Level.BODY)
+            } else {
+                setLevel(HttpLoggingInterceptor.Level.NONE)
+            }
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun providesHttpSecretKeyInterceptor(@NewsKey newsKey: String): Interceptor {
+        return Interceptor {
+            val request = it.request().newBuilder().addHeader("x-api-key", newsKey).build()
+            val response = it.proceed(request)
+            response
+        }
+    }
+
+
+    @Provides
+    @Singleton
+    fun providesOkhttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        secretKeyInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(secretKeyInterceptor).build()
+    }
+
 
     @Singleton
     @Provides
