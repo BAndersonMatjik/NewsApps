@@ -1,8 +1,7 @@
 package com.bmatjik.myapplication.core.remote.model
 
 import com.squareup.moshi.Json
-
-data class NewsSourceResponse(
+ data class NewsSourceResponse(
     @Json(name = "category")
     val category: String,
     @Json(name = "country")

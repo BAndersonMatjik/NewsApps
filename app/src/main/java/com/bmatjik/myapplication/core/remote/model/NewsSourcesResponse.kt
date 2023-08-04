@@ -1,7 +1,6 @@
 package com.bmatjik.myapplication.core.remote.model
 
-
-data class NewsSourcesResponse(
+ data class NewsSourcesResponse(
     val status: String,
     val code:String?="",
     val message:String?="",
