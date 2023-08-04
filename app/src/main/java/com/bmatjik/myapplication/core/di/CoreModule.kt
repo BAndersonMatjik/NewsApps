@@ -1,7 +1,6 @@
 package com.bmatjik.myapplication.core.di
 
 import com.bmatjik.myapplication.BuildConfig
-import com.bmatjik.myapplication.MainActivity
 import com.bmatjik.myapplication.core.remote.api.NewsApi
 import dagger.Module
 import dagger.Provides
