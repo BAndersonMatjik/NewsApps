@@ -1,4 +1,4 @@
-package com.bmatjik.myapplication.view
+package com.bmatjik.myapplication.common
 
 import android.os.Bundle
 import android.view.LayoutInflater
