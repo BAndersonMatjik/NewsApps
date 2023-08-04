@@ -13,8 +13,9 @@ class MarginItemDecoration(private val spaceSize:Int):RecyclerView.ItemDecoratio
         state: RecyclerView.State
     ) {
         with(outRect){
-            right = spaceSize
-
+            top = spaceSize
+            right = 6
+            left = 6
         }
     }
 }
