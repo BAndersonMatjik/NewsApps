@@ -13,7 +13,7 @@ class GetNewsSourcesUsecaseImpl @Inject constructor(private val newsSourceReposi
     GetNewsSourcesUsecase {
     override suspend fun invoke(category: String): Result<List<NewsSource>> {
         return withContext(coroutineDispatcher){
-            newsSourceRepository.getNewsSourceByCategory(category)
+            newsSourceRepository.getNewsSourcesByCategory(category)
         }
     }
 }
