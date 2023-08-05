@@ -28,7 +28,13 @@ class NewsSourcesAdapter : ListAdapter<NewsSource, NewsSourcesAdapter.NewsSource
                 tvTitle.text = newsSource.name
                 tvDescription.text = newsSource.description
 
-                Glide.with(sourceItemBinding.root.context).load(Constants.FlagUrl.replace("#img",newsSource.country)).into(imgCountry)
+                Glide.with(sourceItemBinding.root.context).load(Constants.FlagUrl.replace("#img",newsSource.country.lowercase().let {
+                    if (it == "zh"){
+                         "cn"
+                    }else{
+                        it
+                    }
+                })).into(imgCountry)
                 tvCategory.text = newsSource.category.uppercase()
             }
         }
