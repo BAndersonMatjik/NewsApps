@@ -1,5 +1,5 @@
 package com.bmatjik.myapplication.feature.usecase
 
-interface GetCategoryUseCase{
+interface GetCategoryUsecase{
     suspend fun execute():List<String>
 }
