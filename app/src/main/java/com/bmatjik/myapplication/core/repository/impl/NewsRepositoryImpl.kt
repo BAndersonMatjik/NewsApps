@@ -31,8 +31,8 @@ class NewsRepositoryImpl @Inject constructor(private val newsApi: NewsApi,privat
         }
     }
 
-    override suspend fun getArticlesByNewsSource(newsSource: String): Result<List<Article>> {
-        newsApi.getArticlesByNewsSource(newsSource).let {response ->
+    override suspend fun getArticlesByNewsSource(newsSource: String,pageSize:String,page:String): Result<List<Article>> {
+        newsApi.getArticlesByNewsSource(newsSource,pageSize, page).let {response ->
             if (response.code()!=200){
                 return Result.failure(Exception(moshi.adapter(ArticlesResponse::class.java).fromJson(response.errorBody()?.string()?:"")?.message))
             }else{
