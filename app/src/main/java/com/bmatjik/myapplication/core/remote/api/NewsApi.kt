@@ -10,6 +10,6 @@ interface NewsApi {
     @GET("v2/sources")
     suspend fun getNewsSources(@Query("category") category:String): Response<NewsSourcesResponse>
 
-    @GET("v2/everything?sources=wired")
-    suspend fun getArticlesByNewsSource(@Query("sources") sources:String):Response<ArticlesResponse>
+    @GET("v2/everything")
+    suspend fun getArticlesByNewsSource(@Query("sources") sources:String,@Query("pageSize") pageSize:String,@Query("page") page:String):Response<ArticlesResponse>
 }
