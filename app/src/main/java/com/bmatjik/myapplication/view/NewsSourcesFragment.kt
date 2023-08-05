@@ -37,7 +37,13 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
     }
 
     override fun initView() {
-       viewModel.category = args.category
+        viewModel.category = args.category
+        binding.tvCategory.text = viewModel.category
+        adapter.setOnClickItemListener(object : NewsSourcesAdapter.OnItemClickListener {
+            override fun onClickItem(newsSource: String) {
+                findNavController().navigate(NewsSourcesFragmentDirections.actionNewsSourcesFragmentToArticlesNewsFragment())
+            }
+        })
     }
 
 
@@ -46,7 +52,6 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
         binding.rvNewsSources.addItemDecoration(MarginItemDecoration(8))
         binding.rvNewsSources.adapter = adapter
         viewModel.getNewsSources()
-
         lifecycleScope.launch {
             viewModel.uiState.collectLatest { uiState ->
                 if (uiState.isLoading) {
