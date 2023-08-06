@@ -2,8 +2,7 @@ package com.bmatjik.myapplication.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bmatjik.myapplication.common.Constants
 import com.bmatjik.myapplication.common.Constants.NEWS_SOURCE_MINIMAL_PAGE_SIZE
@@ -11,17 +10,7 @@ import com.bmatjik.myapplication.databinding.SourceItemBinding
 import com.bmatjik.myapplication.feature.model.NewsSource
 import com.bumptech.glide.Glide
 
-class NewsSourcesAdapter : ListAdapter<NewsSource, NewsSourcesAdapter.NewsSourceViewHolder>(NewsSourceDiffUtil()) {
-
-    class NewsSourceDiffUtil : DiffUtil.ItemCallback<NewsSource>() {
-        override fun areItemsTheSame(oldItem: NewsSource, newItem: NewsSource): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
-        }
-
-        override fun areContentsTheSame(oldItem: NewsSource, newItem: NewsSource): Boolean {
-            return oldItem.name == newItem.name
-        }
-    }
+class NewsSourcesAdapter(private val currentList:ArrayList<NewsSource> = arrayListOf()) : RecyclerView.Adapter<NewsSourcesAdapter.NewsSourceViewHolder>() {
     private var onItemClickListener:OnItemClickListener? = null
     fun setOnClickItemListener(onItemClickListener: OnItemClickListener){
         this.onItemClickListener = onItemClickListener
@@ -50,7 +39,7 @@ class NewsSourcesAdapter : ListAdapter<NewsSource, NewsSourcesAdapter.NewsSource
 
     override fun getItemCount(): Int {
         return if (this.currentList.size==0 || this.currentList.size<NEWS_SOURCE_MINIMAL_PAGE_SIZE){
-            super.getItemCount()
+            currentList.size
         }else{
             Int.MAX_VALUE
         }
@@ -61,11 +50,17 @@ class NewsSourcesAdapter : ListAdapter<NewsSource, NewsSourcesAdapter.NewsSource
     }
 
     override fun onBindViewHolder(holder: NewsSourceViewHolder, position: Int) {
-        if (currentList.size>0){
-            holder.onBind(getItem(position % this.currentList.size))
+        if (currentList.size> NEWS_SOURCE_MINIMAL_PAGE_SIZE){
+            holder.onBind(currentList[position % this.currentList.size])
+        }else{
+            holder.onBind(currentList[position])
         }
     }
-
+    fun submitList(list: List<NewsSource>){
+        currentList.clear()
+        currentList.addAll(list)
+        notifyDataSetChanged()
+    }
     interface OnItemClickListener{
         fun onClickItem(newsSource:String)
     }

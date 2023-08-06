@@ -30,6 +30,16 @@ class NewsSourcesViewModel @Inject constructor(
     }
 
 
+    fun searchNewsSources(name:String){
+        viewModelScope.launch {
+            getNewsSourcesUsecase(category).fold(onFailure = {
+                _uiState.value = _uiState.value.copy(false, error = it.message?:"error")
+            }, onSuccess = { it ->
+
+                _uiState.value = _uiState.value.copy(isLoading = false, newsSources = it.filter {data-> data.name.contains(name,true) })
+            })
+        }
+    }
 
     data class NewsSourcesUiState(
         val isLoading:Boolean= false,

@@ -10,11 +10,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bmatjik.myapplication.common.BaseFragment
 import com.bmatjik.myapplication.common.MarginItemDecoration
+import com.bmatjik.myapplication.common.textChangess
 import com.bmatjik.myapplication.databinding.FragmentNewsSourcesBinding
 import com.bmatjik.myapplication.view.adapter.NewsSourcesAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -23,7 +28,7 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
     private val adapter by lazy {
         NewsSourcesAdapter()
     }
-    val args: NewsSourcesFragmentArgs by navArgs()
+    private val args: NewsSourcesFragmentArgs by navArgs()
 
     companion object {
         fun newInstance() = NewsSourcesFragment()
@@ -41,17 +46,34 @@ class NewsSourcesFragment : BaseFragment<FragmentNewsSourcesBinding>() {
         binding.tvCategory.text = viewModel.category
         adapter.setOnClickItemListener(object : NewsSourcesAdapter.OnItemClickListener {
             override fun onClickItem(newsSource: String) {
-                findNavController().navigate(NewsSourcesFragmentDirections.actionNewsSourcesFragmentToArticlesNewsFragment())
+                findNavController().navigate(
+                    NewsSourcesFragmentDirections.actionNewsSourcesFragmentToArticlesNewsFragment(
+                        newsSource = newsSource,
+                        category = viewModel.category
+                    )
+                )
             }
         })
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsSources.addItemDecoration(MarginItemDecoration(8))
         binding.rvNewsSources.adapter = adapter
         viewModel.getNewsSources()
+
+        binding.edtSearch.textChangess().debounce(400)
+            .onEach {
+                it?.let {
+                    if (it.isNotBlank()){
+                        viewModel.searchNewsSources(it.toString())
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+
         lifecycleScope.launch {
             viewModel.uiState.collectLatest { uiState ->
                 if (uiState.isLoading) {
