@@ -16,13 +16,14 @@ class CategoryAdapter constructor(private val list: ArrayList<String> = arrayLis
             view.chipText.text = title
             view.chipText.setOnClickListener {
                 onClickItem?.onClickItem(title)
-                Timber.d("test $title")
+                Timber.d("Title $title")
             }
         }
     }
     fun submit(data:List<String>){
         list.clear()
         list.addAll(data)
+        notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val textItemChipBinding =
