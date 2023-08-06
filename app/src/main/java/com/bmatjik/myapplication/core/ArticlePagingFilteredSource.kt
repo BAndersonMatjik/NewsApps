@@ -9,7 +9,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 @ViewModelScoped
-class ArticlePagingSource @Inject constructor(private val newsRepository:NewsRepository): PagingSource<Int,Article>() {
+class ArticlePagingFilteredSource @Inject constructor(private val newsRepository:NewsRepository): PagingSource<Int,Article>() {
 
     private var newsSource:String = ""
     private var article:String?=null
