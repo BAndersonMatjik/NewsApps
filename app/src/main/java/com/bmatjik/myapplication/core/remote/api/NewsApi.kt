@@ -11,5 +11,5 @@ interface NewsApi {
     suspend fun getNewsSources(@Query("category") category:String): Response<NewsSourcesResponse>
 
     @GET("v2/everything")
-    suspend fun getArticlesByNewsSource(@Query("sources") sources:String,@Query("pageSize") pageSize:String,@Query("page") page:String):Response<ArticlesResponse>
+    suspend fun getArticlesByNewsSource(@Query("sources") sources:String,@Query("pageSize") pageSize:String,@Query("page") page:String,@Query("q") query:String?):Response<ArticlesResponse>
 }

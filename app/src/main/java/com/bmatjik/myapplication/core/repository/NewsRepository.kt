@@ -6,5 +6,6 @@ import com.bmatjik.myapplication.feature.model.NewsSource
 interface NewsRepository {
     suspend fun getNewsSourcesByCategory(category:String):Result<List<NewsSource>>
 
-    suspend fun getArticlesByNewsSource(newsSource: String,pageSize:String,page:String):Result<List<Article>>
+    suspend fun getArticlesByNewsSource(newsSource: String,pageSize:String,page:String,search:String?):Result<List<Article>>
+
 }
