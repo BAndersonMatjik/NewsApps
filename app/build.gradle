@@ -22,7 +22,7 @@ android {
 
         //build config deprecated as AGP 9.0
         buildConfigField "String", "NEWS_API_URL", "\"https://newsapi.org/\""
-        buildConfigField "String", "NEWS_API_KEY", "\"b6242b5b57a44252976563d8f37e520a\""
+        buildConfigField "String", "NEWS_API_KEY", "\"645fbc145a4b4a55a3ae8693f9065cb5\""
     }
 
     buildTypes {
@@ -103,5 +103,6 @@ dependencies {
     def paging_version = "3.0.0" //current version at the time
 
     implementation "androidx.paging:paging-runtime:$paging_version"
+
 
 }
